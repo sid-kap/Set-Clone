@@ -12,9 +12,6 @@ block scripts
   script(src='javascripts/game.js')
 
 block content
-  h1= title
-  p Welcome to all the #{title}
-
   table.game#game
     tr
       td
@@ -30,4 +27,6 @@ block content
       td
       td
       td
-      td 
+      td
+  #log
+    h1 Log 

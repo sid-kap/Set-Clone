@@ -48,7 +48,7 @@ function randomCard() {
 
 	index = remainingCards[randomNumberInRange(remainingCards.length)];
 	obj = {
-		number: Math.floor( (index/27) / 3),
+		number: Math.floor(index / 27),
 		color:  Math.floor( (index%27) / 9),
 		shape:  Math.floor( (index%9)  / 3),
 		shade:  index % 3
@@ -78,25 +78,86 @@ function prepareCard($td) {
 		var index;
 		
 		if ($this.hasClass('selected')) {
-			$this.removeClass('selected');
-
-			// Remove the cell from selectedCards
-			removeJQueryElementFromArray(selectedCards, $this);
+			unselectCell($this);
 		} else {
 			if (selectedCards.length < MAX_SELECTED_CARDS) {
-				selectedCards.push($this);
-				$this.addClass('selected');
+				selectCell($this);
+
+				if (selectedCards.length === 3) {
+					checkForSet();
+				}
 			}
 		}
 
-	})
+	});
+}
+
+function selectCell($td) {
+	selectedCards.push($td);
+	$td.addClass('selected');
+}
+
+function unselectCell($td) {
+	$td.removeClass('selected');
+
+	// Remove the cell from selectedCards
+	removeJQueryElementFromArray(selectedCards, $td);
+}
+
+function checkForSet() {
+	var objs = selectedCards.map( function($td) { return $td.data(); } );
+	if (isASet(objs)) {
+		log('Set found!');
+		$.each(selectedCards, function ($td, index) {
+			makeRandomCard($td);
+		});
+	} else {
+		log('Not a set!');
+		setTimeout(removeSelections, 400);
+	}
+}
+
+function removeSelections() {
+	while (selectedCards.length > 0) {
+		unselectCell(selectedCards[0]);
+	}
 }
 
 /**
- *
+ * Takes an array of indices, returns whether the array is a Set.
  */
-function isSet(array) {
+function isASet(array) {
+	// A Set must have 3 cards.
+	if (array.length !== 3) {
+		return false;
+	}
 
+	var numbers = 0, colors = 0, shapes = 0, shades = 0;
+	var attributes, numBits, attr;
+
+	for (var i in array) {
+		console.log(array[i]);
+		numbers += array[i].number;
+		colors += array[i].color;
+		shapes += array[i].shape;
+		shades += array[i].shade;
+	}
+
+	attributes = [numbers, colors, shapes, shades];
+	console.log(attributes);
+
+	for (var i in attributes) {
+		attr = attributes[i];
+		if (attr !== 0 && attr !== 3 && attr !== 6) {
+			return false;
+		}
+	}
+
+	return true;
+}
+
+function log(text) {
+	$('#log').append(text + '\n');
 }
 
 $(function() {
