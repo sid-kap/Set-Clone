@@ -1,0 +1,33 @@
+extends layout
+
+mixin ovals(count)
+  table.card: tr
+    - for(var i=0; i<count; i++)
+      td: .oval
+
+block scripts
+  // script(src='javascripts/paper-full.min.js')
+  script(src='javascripts/jquery-1.11.1.min.js')
+  script(src='javascripts/jsutils.js')
+  script(src='javascripts/game.js')
+
+block content
+  h1= title
+  p Welcome to all the #{title}
+
+  table.game#game
+    tr
+      td
+      td
+      td
+      td
+    tr
+      td
+      td
+      td
+      td
+    tr
+      td
+      td
+      td
+      td 
