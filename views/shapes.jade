@@ -8,8 +8,8 @@ mixin row()
 
 mixin card()
   td
-    .front
-    .back.flipped
+    .card.front.flipped
+    .card.back
 
 mixin 
 
@@ -24,4 +24,9 @@ block content
     - for (var i = 0; i < 3; i++)
       +row()
   #log
-    h1 Log 
+    h2
+      span#sets-found 0
+      |  sets found
+    h2
+      span#incorrect-guesses 0
+      |  incorrect guesses

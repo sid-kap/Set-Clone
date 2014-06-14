@@ -4,7 +4,11 @@ var COLORS = ['RED', 'PURPLE', 'GREEN'];
 var SHAPES = ['SQUIGGLE', 'DIAMOND', 'ECLAIR'];
 var SHADES = ['SOLID', 'STRIPED', 'EMPTY'];
 var MAX_SELECTED_CARDS = 3;
+var SIZE_OF_SET = 3;
 var NUM_CARDS = NUMBERS.length * COLORS.length * SHAPES.length * SHADES.length;
+
+var setsFound = 0;
+var incorrectGuesses = 0;
 
 var $ = jQuery;
 
@@ -66,19 +70,11 @@ function randomCard() {
 function makeRandomCard($td) {
 	var obj = randomCard();
 
-	var str = NUMBERS[obj.number] + " " + SHADES[obj.shade] + " " + COLORS[obj.color] + " " + SHAPES[obj.shape];
-	if (obj.number > 0)
-		str += "S";
-
 	$td.data(obj);
-	//$td.text(str);
-	/*
-	$td.css('background-image', "url('images/logo.png')");
-	$td.css('-webkit-transition', '-webkit-transform 1s');
-	$td.css('-webkit-transform', 'rotateY(180deg)');
-	*/
 
-	$front = $td.find('.front');
+	$children = $td.children();
+
+	$front = $children.first();
 	$front.css('background-image', "url('" + obj.img + "')");
 }
 
@@ -86,7 +82,7 @@ function prepareCard($td) {
 	$td.click(function() {
 		var $this = $(this);
 		
-		if ($this.hasClass('selected')) {
+		if ($this.hasClass('selected-card')) {
 			unselectCell($this);
 		} else {
 			if (selectedCards.length < MAX_SELECTED_CARDS) {
@@ -101,33 +97,51 @@ function prepareCard($td) {
 	});
 }
 
-function removeCard() {
-
+function removeCard($td) {
+	unselectCell($td);
 }
 
+/**
+ * PRECONDITION: Cell is not selected.
+ */
 function selectCell($td) {
 	selectedCards.push($td);
-	$td.children().first().addClass('selected');
-	$td.children().toggleClass('flipped');
+
+	$td.addClass('selected-card');
+	$children = $td.children();
+	$children.first().addClass('selected');
+	//$children.toggleClass('flipped');
 }
 
+/**
+ * PRECONDITION: Cell is selected.
+ */
 function unselectCell($td) {
-	$td.children().first().removeClass('selected');
-	$td.children().toggleClass('flipped');
-
 	// Remove the cell from selectedCards
 	removeJQueryElementFromArray(selectedCards, $td);
+
+	$td.removeClass('selected-card');
+	$children = $td.children();
+	$children.first().removeClass('selected');
+	//$children.toggleClass('flipped');
 }
 
 function checkForSet() {
 	var objs = selectedCards.map( function($td) { return $td.data(); } );
 	if (isASet(objs)) {
-		log('Set found!');
-		$.each(selectedCards, function ($td, index) {
-			makeRandomCard($td);
+		incrementSetsFound();
+
+		$.each(selectedCards, function (index, $td) {
+			$td.children().toggleClass('flipped');
+			setTimeout(function() {
+				removeSelections();
+				makeRandomCard($td);
+				$td.children().toggleClass('flipped');
+			}, 1000);
 		});
 	} else {
-		log('Not a set!');
+		incrementIncorrectGuesses();
+
 		setTimeout(removeSelections, 600);
 	}
 }
@@ -143,23 +157,23 @@ function removeSelections() {
  */
 function isASet(array) {
 	// A Set must have 3 cards.
-	if (array.length !== 3) {
+	if (array.length !== SIZE_OF_SET) {
 		return false;
 	}
 
-	var numbers = 0, colors = 0, shapes = 0, shades = 0;
-	var attributes, numBits, attr;
+	var attributes = {
+		numbers: 0, 
+		colors:  0,
+		shapes:  0,
+		shades:  0
+	};
 
 	for (var i in array) {
-		console.log(array[i]);
-		numbers += array[i].number;
-		colors += array[i].color;
-		shapes += array[i].shape;
-		shades += array[i].shade;
+		attributes.numbers += array[i].number;
+		attributes.colors += array[i].color;
+		attributes.shapes += array[i].shape;
+		attributes.shades += array[i].shade;
 	}
-
-	attributes = [numbers, colors, shapes, shades];
-	console.log(attributes);
 
 	for (var i in attributes) {
 		attr = attributes[i];
@@ -172,13 +186,26 @@ function isASet(array) {
 }
 
 function log(text) {
-	$('#log').append(text + '\n');
+	$('#log').append(text + '<br>');
+}
+
+function incrementIncorrectGuesses() {
+	incorrectGuesses++;
+	$('#incorrect-guesses').text(incorrectGuesses);
+}
+
+function incrementSetsFound() {
+	setsFound++;
+	$('#sets-found').text(setsFound);
 }
 
 $(function() {
-	$('#game td').each(function(index, value) { 
-		var $value = $(value);
-		makeRandomCard ($value);
-		prepareCard ($value);
+	$('#game td').each(function(index, td) { 
+		var $td = $(td);
+		makeRandomCard ($td);
+		prepareCard ($td);
 	});
+	setTimeout(function() {
+		$('.card').toggleClass('flipped');
+	}, 500);
 })

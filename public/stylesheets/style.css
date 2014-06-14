@@ -5,17 +5,6 @@ body {
 a {
   color: #00b7ff;
 }
-.oval {
-  background: repeating-linear-gradient(to bottom, transparent, transparent 2%, #606dbc 2%, #606dbc 4%);
-  border: 2px solid #606dbc;
-  width: 100px;
-  height: 250px;
-  -webkit-border-radius: 100px;
-  -moz-border-radius: 100px;
-  border-radius: 100px;
-  text-align: center;
-  color: #00f;
-}
 table.game {
   border-spacing: 20px;
   float: left;
@@ -37,29 +26,26 @@ table.game td {
   position: relative;
   z-index: 3;
 }
-.front {
+.card {
   -webkit-border-radius: 20px;
   -moz-border-radius: 20px;
   border-radius: 20px;
   box-shadow: 0px 0px 3px 2px #000;
-  position: absolute;
-  z-index: 2;
   width: 120px;
   height: 200px;
   backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
   background-repeat: no-repeat;
   background-size: 120px 200px;
   -webkit-transition: -webkit-transform 500ms linear;
 }
+.front {
+  position: absolute;
+  z-index: 2;
+}
 .back {
   z-index: 1;
-  width: 120px;
-  height: 200px;
-  backface-visibility: hidden;
-  background-image: url("images/logo.png");
-  background-repeat: no-repeat;
-  background-size: 120px 200px;
-  -webkit-transition: -webkit-transform 500ms linear;
+  background-image: url("../images/logo.png");
 }
 .flipped {
   -webkit-transform: rotateY(180deg);

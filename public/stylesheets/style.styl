@@ -16,20 +16,15 @@ no-select()
 no-drag()
   -webkit-user-drag: none;
 
+backface-visibility()
+  backface-visibility arguments
+  -webkit-backface-visibility arguments
+
 body
   padding: 50px
   font: 14px "Open Sans", "Lucida Grande", Helvetica, Arial, sans-serif
 a
   color: #00B7FF
-
-.oval
-  background: repeating-linear-gradient(to bottom, transparent, transparent $stripe-width, #606dbc $stripe-width, #606dbc $stripe-width*2)
-  border: 2px solid #606dbc
-  width: 100px
-  height: 250px
-  border-radius(100px)
-  text-align: center
-  color: blue
 
 table.game
   border-spacing: 20px
@@ -47,28 +42,24 @@ table.game td
   position: relative
   z-index: 3
 
-.front
+.card
   border-radius(20px)
   box-shadow: 0px 0px 3px 2px black
-  position: absolute
-  z-index: 2
   width: 120px
   height: 200px
-  backface-visibility: hidden
+  backface-visibility(hidden)
   background-repeat: no-repeat
   background-size: 120px 200px
   -webkit-transition: -webkit-transform 500ms linear;
 
+.front
+  position: absolute
+  z-index: 2
+
 .back
   //position: absolute
   z-index: 1
-  width: 120px
-  height: 200px
-  backface-visibility: hidden
-  background-image: url('images/logo.png')
-  background-repeat: no-repeat
-  background-size: 120px 200px
-  -webkit-transition: -webkit-transform 500ms linear;
+  background-image: url('../images/logo.png')
 
 .flipped
   -webkit-transform: rotateY(180deg)
