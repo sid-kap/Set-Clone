@@ -31,17 +31,11 @@ a
   text-align: center
   color: blue
 
-.card
-  border: 2px solid black
-
 table.game
   border-spacing: 20px
   float: left
 
 table.game td
-  //border: 2px solid black
-  border-radius(20px)
-  box-shadow: 0px 0px 3px 2px black
   width: 120px
   height: 200px
   text-align: center
@@ -49,10 +43,39 @@ table.game td
   no-drag()
   background-repeat: no-repeat
   background-size: 120px 200px
+  -webkit-transition: -webkit-transform 500ms linear;
+  position: relative
+  z-index: 3
+
+.front
+  border-radius(20px)
+  box-shadow: 0px 0px 3px 2px black
+  position: absolute
+  z-index: 2
+  width: 120px
+  height: 200px
+  backface-visibility: hidden
+  background-repeat: no-repeat
+  background-size: 120px 200px
+  -webkit-transition: -webkit-transform 500ms linear;
+
+.back
+  //position: absolute
+  z-index: 1
+  width: 120px
+  height: 200px
+  backface-visibility: hidden
+  background-image: url('images/logo.png')
+  background-repeat: no-repeat
+  background-size: 120px 200px
+  -webkit-transition: -webkit-transform 500ms linear;
+
+.flipped
+  -webkit-transform: rotateY(180deg)
 
 .selected
   border: none !important
-  box-shadow: 0px 0px 5pt 4pt green !important\
+  box-shadow: 0px 0px 5pt 4pt green !important
 
 #log
   float: left

@@ -72,7 +72,14 @@ function makeRandomCard($td) {
 
 	$td.data(obj);
 	//$td.text(str);
-	$td.css('background-image', "url('" + obj.img + "')");
+	/*
+	$td.css('background-image', "url('images/logo.png')");
+	$td.css('-webkit-transition', '-webkit-transform 1s');
+	$td.css('-webkit-transform', 'rotateY(180deg)');
+	*/
+
+	$front = $td.find('.front');
+	$front.css('background-image', "url('" + obj.img + "')");
 }
 
 function prepareCard($td) {
@@ -94,13 +101,19 @@ function prepareCard($td) {
 	});
 }
 
+function removeCard() {
+
+}
+
 function selectCell($td) {
 	selectedCards.push($td);
-	$td.addClass('selected');
+	$td.children().first().addClass('selected');
+	$td.children().toggleClass('flipped');
 }
 
 function unselectCell($td) {
-	$td.removeClass('selected');
+	$td.children().first().removeClass('selected');
+	$td.children().toggleClass('flipped');
 
 	// Remove the cell from selectedCards
 	removeJQueryElementFromArray(selectedCards, $td);
@@ -115,7 +128,7 @@ function checkForSet() {
 		});
 	} else {
 		log('Not a set!');
-		setTimeout(removeSelections, 400);
+		setTimeout(removeSelections, 600);
 	}
 }
 

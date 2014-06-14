@@ -1,9 +1,17 @@
 extends layout
 
-mixin ovals(count)
-  table.card: tr
-    - for(var i=0; i<count; i++)
-      td: .oval
+
+mixin row()
+  tr
+    - for(var i = 0; i < 4; i++)
+      +card()
+
+mixin card()
+  td
+    .front
+    .back.flipped
+
+mixin 
 
 block scripts
   // script(src='javascripts/paper-full.min.js')
@@ -13,20 +21,7 @@ block scripts
 
 block content
   table.game#game
-    tr
-      td
-      td
-      td
-      td
-    tr
-      td
-      td
-      td
-      td
-    tr
-      td
-      td
-      td
-      td
+    - for (var i = 0; i < 3; i++)
+      +row()
   #log
     h1 Log 
