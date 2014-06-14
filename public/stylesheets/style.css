@@ -38,6 +38,8 @@ table.game td {
   -ms-user-select: none;
   user-select: none;
   -webkit-user-drag: none;
+  background-repeat: no-repeat;
+  background-size: 120px 200px;
 }
 .selected {
   border: none !important;
